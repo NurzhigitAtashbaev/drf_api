@@ -11,3 +11,11 @@ class CreateProductSerializer(serializers.ModelSerializer):
         product = Product.objects.create(title=validated_data.get('title'),
                                          price=validated_data.get('price'))
         return product
+
+
+class RetrieveProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
