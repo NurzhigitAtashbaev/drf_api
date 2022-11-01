@@ -13,9 +13,13 @@ class CreateProductSerializer(serializers.ModelSerializer):
         return product
 
 
-class RetrieveProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'

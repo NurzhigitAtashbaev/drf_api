@@ -1,11 +1,10 @@
-from django.http import Http404
 from .models import Product, Category
-from rest_framework.views import APIView, Response
-from .serializers import CreateProductSerializer, RetrieveProductSerializer
-from django.forms import model_to_dict
-from rest_framework import generics
-from django.shortcuts import get_object_or_404
+from rest_framework.views import Response
+from .serializers import ProductSerializer, CategorySerializer
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly, IsAdminUser
+from .permissions import IsAdminOrReadOnly
 
 # class ProductCreateView(APIView):
 #
@@ -106,10 +105,26 @@ from rest_framework import viewsets
 #     #     if serializer.is_valid():
 #     #         serializer.save()
 #     #     return Response(serializer.data)
-#
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
-    serializer_class = RetrieveProductSerializer
+    serializer_class = ProductSerializer
+    permission_classes = (IsAdminOrReadOnly, )
+
+    @action(detail=False, methods=['get'])
+    def get_json_text(self, request):
+        return Response({'text': '123'})
+
+    @action(detail=False, methods=['get'])
+    def get_categorys(self, request):
+        categs = Category.objects.all()
+        serializer = CategorySerializer(categs, many=True)
+        return Response(serializer.data)
+
+
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
 
